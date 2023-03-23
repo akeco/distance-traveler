@@ -40,3 +40,44 @@ body {
   @include common-white-space;
   bottom: 0;
 }
+
+.carret::before {
+  content: url("./assets/icons/carret.svg");
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -16px;
+  left: 10px;
+}
+
+.react-datepicker__header {
+  @apply bg-white border-b-0 pt-4;
+}
+
+.react-datepicker {
+  @apply rounded-md border-purple-light;
+}
+
+.react-datepicker__triangle::before {
+  @apply border-b-0 #{!important};
+}
+
+.react-datepicker__triangle::after {
+  @apply border-b-purple-light #{!important};
+}
+
+.react-datepicker__month-container {
+  @apply p-3;
+}
+
+.react-datepicker__day {
+  @apply text-base;
+}
+
+.react-datepicker__day-name {
+  @apply text-base font-bold;
+}
+
+.react-datepicker__day-names {
+  @apply mt-2;
+}

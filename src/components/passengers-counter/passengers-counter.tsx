@@ -15,11 +15,11 @@ export const PassengersCounter = ({
   onDecrease,
 }: PassengersCounterProps) => {
   return (
-    <div>
+    <div className={className}>
+      <p>Passengers</p>
       <div
         className={clsx(
           "flex items-center justify-between border border-gray-200 rounded-md w-[100px]",
-          className,
           {
             ["border-red"]: !value,
           }
@@ -29,6 +29,7 @@ export const PassengersCounter = ({
           className={clsx("w-[23px] h-[23px] !p-0", {
             "border-red": !value,
           })}
+          color="primary"
           variant="filled"
           disabled={!value}
           onClick={onDecrease}
@@ -38,6 +39,7 @@ export const PassengersCounter = ({
         <span className="flex justify-center">{value}</span>
         <Button
           className="w-[23px] h-[23px] !p-0"
+          color="primary"
           variant="filled"
           onClick={onIncrease}
         >
