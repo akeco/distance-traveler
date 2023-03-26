@@ -1,19 +1,23 @@
-import { useState, useReducer, SetStateAction } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useReducer, SetStateAction, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/shared/button/button";
 import { PassengersCounter } from "@/components/passengers-counter/passengers-counter";
 import { getRandomId } from "@/utils/getRandomId";
-import { DestinationList } from "@/components/destinations-list/destination-list";
+import { DestinationFormList } from "@/components/destination-form-list/destination-form-list";
 import { ReactComponent as AddIcon } from "@/assets/icons/add-icon.svg";
 import { DatePicker } from "@/components/shared/date-picker/date-picker";
 import { CityType, DestinationType } from "@/types";
 import dayjs from "dayjs";
+import { getQueryStringFromObject } from "@/utils/getQueryStringFromObject";
+import { RESULTS_PAGE } from "@/routes/routes";
+import { useGetDataFromQuery } from "@/hooks/useGetDataFromQuery";
 
 enum Cases {
   ADD = "ADD",
   REMOVE = "REMOVE",
   CLEAR = "CLEAR",
   SELECT = "SELECT",
+  REPLACE = "REPLACE",
 }
 
 const initialDestinations: DestinationType[] = [
@@ -27,7 +31,10 @@ const initialDestinations: DestinationType[] = [
 
 const reducer = (
   state: DestinationType[],
-  action: Record<string, string | Record<string, string | number>>
+  action: Record<
+    string,
+    DestinationType[] | string | Record<string, string | number>
+  >
 ) => {
   switch (action.type) {
     case Cases.ADD:
@@ -49,6 +56,8 @@ const reducer = (
           id: item.id,
         };
       });
+    case Cases.REPLACE:
+      return action.value as DestinationType[];
     default:
       return state;
   }
@@ -61,6 +70,24 @@ export const HomePage = () => {
     new Date(dayjs(new Date()).add(1, "day").format())
   );
   const navigate = useNavigate();
+  const location = useLocation();
+  const {
+    destinations: destinationsFromQuery,
+    passengers,
+    date,
+  } = useGetDataFromQuery(location.search);
+
+  useEffect(() => {
+    if (destinationsFromQuery.length) {
+      dispatch({ type: Cases.REPLACE, value: destinationsFromQuery });
+    }
+    if (passengers >= 1) {
+      setNumberOfPassengers(passengers);
+    }
+    if (date && !dayjs(date).isBefore(new Date())) {
+      setStartDate(new Date(dayjs(date).format()));
+    }
+  }, [destinationsFromQuery, passengers, date]);
 
   const onAddPassengers = () => setNumberOfPassengers((value) => value + 1);
   const onRemovePassengers = () => setNumberOfPassengers((value) => value - 1);
@@ -83,24 +110,13 @@ export const HomePage = () => {
   const onDateChange = (date: SetStateAction<Date>) => setStartDate(date);
 
   const onSubmit = () => {
-    const destinationsList: Record<string, string | number | undefined>[] =
-      destinations.map((item: DestinationType) => {
-        return {
-          id: item.id,
-          [`${item.id}-name`]: item.name,
-          [`${item.id}-latitude`]: item.latitude,
-          [`${item.id}-longitude`]: item.longitude,
-        };
-      });
-
-    const params = new URLSearchParams();
-    destinationsList.forEach((obj) => {
-      Object.keys(obj).forEach((key) => {
-        if (obj[key]) params.append(key, obj[key] as string);
-      });
-    });
-
-    navigate(`/results?${params.toString()}`);
+    navigate(
+      `${RESULTS_PAGE}?${getQueryStringFromObject(destinations, [
+        "name",
+        "latitude",
+        "longitude",
+      ])}&passengers=${numbOfPassengers}&date=${dayjs(startDate).valueOf()}`
+    );
   };
 
   return (
@@ -108,7 +124,7 @@ export const HomePage = () => {
       <div className="bg-white rounded-3xl py-[62px] px-[89px]">
         <div className="flex items-start">
           <div className="mr-[78px]">
-            <DestinationList
+            <DestinationFormList
               destinations={destinations}
               onRemoveDestination={onRemoveDestination}
               onSelectDestination={onSelectDestination}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { SearchDropdown } from "../shared/search-dropdown/search-dropdown";
 import { useDebounce } from "@/hooks/useDebounce";
 import { CityType, DestinationType } from "@/types";
@@ -14,6 +14,9 @@ type DestinationsSearchProps = {
   onClear(id: string): void;
 };
 
+const TIMEOUT = 1000;
+const DEBOUNCE_TIMEOUT = 250;
+
 export const DestinationsSearch = ({
   destination,
   label,
@@ -23,7 +26,28 @@ export const DestinationsSearch = ({
   onClear,
 }: DestinationsSearchProps) => {
   const [value, setValue] = useState<string>("");
-  const debouncedValue = useDebounce<string>(value, 250);
+  const [disableLoader, setDisableLoader] = useState<boolean>(false);
+  const debouncedValue = useDebounce<string>(value, DEBOUNCE_TIMEOUT);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    if (destination.name) {
+      setDisableLoader(true);
+      setValue(destination.name);
+
+      timerRef.current = setTimeout(() => {
+        setDisableLoader(false);
+      }, TIMEOUT);
+    }
+  }, [destination]);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   const { cities, isLoading, error } = useFetchCities(debouncedValue);
 
@@ -39,7 +63,7 @@ export const DestinationsSearch = ({
       value={value}
       selectedDestination={destination}
       cities={cities}
-      isLoading={isLoading}
+      isLoading={disableLoader ? false : isLoading}
       hasRemoveIcon={hasRemoveIcon}
       label={label}
       onChangeValue={setValue}

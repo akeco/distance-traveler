@@ -18,9 +18,11 @@
 body {
   background-image: url("./assets/images/background.png");
   background-size: cover;
+  @apply text-purple-dark;
 }
 
 @mixin common-white-space {
+  @apply bg-white;
   content: "";
   display: block;
   position: absolute;
@@ -28,7 +30,6 @@ body {
   height: 40px;
   width: 16px;
   z-index: 0;
-  background-color: white;
 }
 
 .white-space-top-content::before {
@@ -89,4 +90,24 @@ body {
 
 .react-datepicker__day-names {
   @apply mt-2;
+}
+
+.triangle {
+  @apply border-purple;
+  width: 0;
+  height: 0;
+
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid;
+}
+
+.triangle:before {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 5px solid white;
 }

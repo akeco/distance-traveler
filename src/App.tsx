@@ -1,14 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { HomePage } from "./pages/home-page/home-page";
+import { BrowserRouter } from "react-router-dom";
+import { Routes } from "@/routes/routes";
 import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-        </Routes>
+        <Routes />
       </BrowserRouter>
       <Toaster />
     </>
