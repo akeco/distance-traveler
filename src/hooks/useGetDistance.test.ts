@@ -36,7 +36,7 @@ describe("Testing useGetDataFromQuery hook functionality", () => {
   it("Test valid cases with existing query", () => {
     hookResults = renderHook(() => useGetDataFromQuery(searchQuery));
     const { result } = hookResults;
-    expect(hookResults.result.current.date).toBeDefined();
+    expect(result.current.date).toBeDefined();
     expect(result.current.date).toEqual(1679904232000);
     expect(result.current.passengers).toBeDefined();
     expect(result.current.passengers).toEqual(2);
@@ -47,10 +47,7 @@ describe("Testing useGetDataFromQuery hook functionality", () => {
   it("Test invalid cases with missing query", () => {
     searchQuery = "";
     hookResults = renderHook(() => useGetDataFromQuery(searchQuery));
-    const { result, rerender } = hookResults;
-
-    rerender();
-
+    const { result } = hookResults;
     expect(result.current.date).toBeDefined();
     expect(result.current.date).toEqual(NaN);
     expect(result.current.passengers).toBeDefined();
@@ -59,12 +56,29 @@ describe("Testing useGetDataFromQuery hook functionality", () => {
     expect(result.current.destinations).toEqual([]);
   });
 
-  it("Test error case", () => {
-    searchQuery = errorSearchQuery;
+  it("Test valid cases with partial query", () => {
+    searchQuery =
+      "AZroseLlFw-name=Paris&xA407Rzb4d-latitude=43.710173&passengers=2&date=1679904232000";
     hookResults = renderHook(() => useGetDataFromQuery(searchQuery));
-    const { result, rerender } = hookResults;
+    const { result } = hookResults;
 
-    rerender();
-    expect(result.current.destinations.length).toEqual(0);
+    expect(result.current.date).toBeDefined();
+    expect(result.current.date).toEqual(1679904232000);
+    expect(result.current.passengers).toBeDefined();
+    expect(result.current.passengers).toEqual(2);
+    expect(result.current.destinations).toBeDefined();
+    expect(result.current.destinations).toHaveLength(2);
+
+    const [destination1, destination2] = result.current.destinations;
+
+    expect(destination1.id).toEqual("AZroseLlFw");
+    expect(destination1.name).toEqual("Paris");
+    expect(destination1.latitude).toBeUndefined();
+    expect(destination1.longitude).toBeUndefined();
+
+    expect(destination2.id).toEqual("xA407Rzb4d");
+    expect(destination2.name).toBeUndefined();
+    expect(destination2.latitude).toEqual(43.710173);
+    expect(destination2.longitude).toBeUndefined();
   });
 });

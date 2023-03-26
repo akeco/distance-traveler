@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, beforeEach } from "vitest";
 import { renderHook, RenderHookResult } from "@testing-library/react-hooks";
 import { useGetDataFromQuery } from "@/hooks/useGetDataFromQuery";
 import { DestinationType } from "@/types";
@@ -23,7 +23,7 @@ let searchQuery =
 const errorSearchQuery =
   "AZroseLlFw-name=Dijon&AZroseLlFw-latitude=48.856614&AZroseLlFw-longitude=2.352222&xA407Rzb4d-name=Nice&xA407Rzb4d-latitude=43.710173&xA407Rzb4d-longitude=7.261953&passengers=2&date=1679904232000";
 
-describe("Testing useGetDataFromQuery hook functionality", () => {
+describe("useGetDataFromQuery", () => {
   let hookResults: RenderHookResult<
     [],
     {
@@ -33,29 +33,45 @@ describe("Testing useGetDataFromQuery hook functionality", () => {
     }
   >;
 
-  it("Test valid cases with existing query", () => {
-    hookResults = renderHook(() => useGetDataFromQuery(searchQuery));
-    const { result } = hookResults;
-    expect(hookResults.result.current.date).toBeDefined();
-    expect(result.current.date).toEqual(1679904232000);
-    expect(result.current.passengers).toBeDefined();
-    expect(result.current.passengers).toEqual(2);
-    expect(result.current.destinations).toBeDefined();
-    expect(result.current.destinations).toEqual(destinations);
+  describe("with valid query string", () => {
+    beforeEach(() => {
+      hookResults = renderHook(() => useGetDataFromQuery(searchQuery));
+    });
+
+    it("returns valid date", () => {
+      expect(hookResults.result.current.date).toBeDefined();
+      expect(hookResults.result.current.date).toEqual(1679904232000);
+    });
+
+    it("returns valid number of passengers", () => {
+      expect(hookResults.result.current.passengers).toBeDefined();
+      expect(hookResults.result.current.passengers).toEqual(2);
+    });
+
+    it("returns valid destinations array", () => {
+      expect(hookResults.result.current.destinations).toBeDefined();
+      expect(hookResults.result.current.destinations).toEqual(destinations);
+    });
   });
 
-  it("Test invalid cases with missing query", () => {
-    searchQuery = "";
-    hookResults = renderHook(() => useGetDataFromQuery(searchQuery));
-    const { result, rerender } = hookResults;
+  describe("with invalid query string", () => {
+    beforeEach(() => {
+      hookResults = renderHook(() => useGetDataFromQuery(""));
+    });
 
-    rerender();
+    it("returns NaN for date", () => {
+      expect(hookResults.result.current.date).toBeDefined();
+      expect(hookResults.result.current.date).toEqual(NaN);
+    });
 
-    expect(result.current.date).toBeDefined();
-    expect(result.current.date).toEqual(NaN);
-    expect(result.current.passengers).toBeDefined();
-    expect(result.current.passengers).toEqual(NaN);
-    expect(result.current.destinations).toBeDefined();
-    expect(result.current.destinations).toEqual([]);
+    it("returns NaN for number of passengers", () => {
+      expect(hookResults.result.current.passengers).toBeDefined();
+      expect(hookResults.result.current.passengers).toEqual(NaN);
+    });
+
+    it("returns empty array for destinations", () => {
+      expect(hookResults.result.current.destinations).toBeDefined();
+      expect(hookResults.result.current.destinations).toEqual([]);
+    });
   });
 });
