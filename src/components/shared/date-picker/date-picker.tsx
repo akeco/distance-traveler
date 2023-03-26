@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, forwardRef } from "react";
+import { forwardRef } from "react";
 import DatePickerComponent, {
   ReactDatePickerCustomHeaderProps,
   ReactDatePickerProps,
@@ -50,7 +50,11 @@ const DatePickerHeader = ({
 
 type DatePickerProps = {
   startDate: Date;
-  onChange: Dispatch<SetStateAction<Date>>;
+  onChange?: (
+    date: Date | null,
+    event: React.SyntheticEvent<any> | undefined
+  ) => void;
+  // onChange: Dispatch<SetStateAction<Date>>;
 } & ReactDatePickerProps;
 
 export const DatePicker = ({ startDate, onChange }: DatePickerProps) => {

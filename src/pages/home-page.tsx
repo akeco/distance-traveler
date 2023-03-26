@@ -1,4 +1,4 @@
-import { useState, useReducer, SetStateAction, useEffect } from "react";
+import { useState, useReducer, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/shared/button/button";
 import { PassengersCounter } from "@/components/passengers-counter/passengers-counter";
@@ -66,7 +66,7 @@ const reducer = (
 export const HomePage = () => {
   const [destinations, dispatch] = useReducer(reducer, initialDestinations);
   const [numbOfPassengers, setNumberOfPassengers] = useState(1);
-  const [startDate, setStartDate] = useState<Date>(
+  const [startDate, setStartDate] = useState<Date | null>(
     new Date(dayjs(new Date()).add(1, "day").format())
   );
   const navigate = useNavigate();
@@ -107,7 +107,12 @@ export const HomePage = () => {
     !!numbOfPassengers &&
     !!startDate;
 
-  const onDateChange = (date: SetStateAction<Date>) => setStartDate(date);
+  //const onDateChange = (date: SetStateAction<Date>) => setStartDate(date);
+
+  const onDateChange = (
+    date: Date | null,
+    event: React.SyntheticEvent<any> | undefined
+  ) => setStartDate(date);
 
   const onSubmit = () => {
     navigate(
@@ -138,7 +143,7 @@ export const HomePage = () => {
               onIncrease={onAddPassengers}
               onDecrease={onRemovePassengers}
             />
-            <DatePicker startDate={startDate} onChange={onDateChange} />
+            <DatePicker startDate={startDate as Date} onChange={onDateChange} />
           </div>
         </div>
 
