@@ -38,11 +38,10 @@ export const ResultsPage = () => {
 
   return (
     <div className="flex justify-center items-center w-[100vw] h-[100vh]">
-      <div className="bg-white rounded-3xl pt-[78px] pb-[31px] px-[252px]">
-        {isLoading && <Spinner />}
+      <div className="bg-white rounded-3xl pt-[30px] md:pt-[78px] pb-[22px] md:pb-[31px] px-4 md:px-[252px] w-full md:w-auto">
         {!error ? (
           <>
-            <div className="relative">
+            <div className="relative flex justify-center">
               <DestinationResultList
                 destinations={destinations}
                 distances={distances}
@@ -70,7 +69,12 @@ export const ResultsPage = () => {
           </p>
         )}
         <div className="flex justify-center">
-          <Button color="dark" variant="filled" onClick={onGoBack}>
+          <Button
+            className="w-full mdw-auto"
+            color="dark"
+            variant="filled"
+            onClick={onGoBack}
+          >
             Back
           </Button>
         </div>

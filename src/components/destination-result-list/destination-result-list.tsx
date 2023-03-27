@@ -2,6 +2,7 @@ import { DestinationType } from "@/types";
 import { ReactComponent as PinIcon } from "@/assets/icons/pin.svg";
 import clsx from "clsx";
 import { DistanceLabel } from "../shared/distance-label/distance-label";
+import { BorderLine } from "../shared/border-line/border-line";
 
 type DestinationResultListProps = {
   distances: number[];
@@ -13,7 +14,7 @@ export const DestinationResultList = ({
   destinations,
 }: DestinationResultListProps) => {
   return (
-    <div className="relative">
+    <div className="relative max-w-[250px]">
       {destinations.map((item, index) => (
         <div
           key={item.id}
@@ -32,7 +33,7 @@ export const DestinationResultList = ({
               <div className="border border-gray-700 bg-white rounded-full w-[18px] h-[18px] z-10"></div>
             )}
             {index !== destinations.length - 1 && (
-              <div className="h-full absolute left-[49.5%] border-l border-black border-dotted z-0 w-1"></div>
+              <BorderLine className="h-[14px] top-[22px] absolute left-[49.5%]" />
             )}
           </div>
 

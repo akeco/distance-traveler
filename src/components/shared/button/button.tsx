@@ -17,7 +17,7 @@ export const Button = ({
   return (
     <button
       {...props}
-      className={clsx("m-2 px-3 py-2 rounded-md text-lg", className, {
+      className={clsx("m-[6px] px-3 py-2 rounded-md text-lg", className, {
         "text-purple": variant === "ghost",
         "bg-purple-light border-gray-200 hover:bg-purple text-white":
           color === "primary" && variant !== "ghost",

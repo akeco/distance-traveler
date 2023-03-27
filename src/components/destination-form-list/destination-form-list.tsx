@@ -1,10 +1,9 @@
 import { ReactComponent as PinIcon } from "@/assets/icons/pin.svg";
-import clsx from "clsx";
 import { DestinationsSearch } from "@/components/destinations-search/destinations-search";
 import { CityType, DestinationType } from "@/types";
+import { BorderLine } from "../shared/border-line/border-line";
 
 type DestinationFormListProps = {
-  children?: any;
   destinations: DestinationType[];
   onRemoveDestination(id: string): void;
   onSelectDestination(id: string, value: CityType): void;
@@ -21,19 +20,22 @@ export const DestinationFormList = ({
   onClear,
 }: DestinationFormListProps) => {
   return (
-    <div className="relative border-l-2 border-dotted border-gray-700 pl-10">
+    <div className="relative  pl-10">
       {destinations.map((item, index) => (
-        <div
-          key={item.id}
-          className={clsx("flex items-center", {
-            ["white-space-top-content"]: !index,
-            ["white-space-bottom-content"]: index === destinations.length - 1,
-          })}
-        >
+        <div key={item.id} className="flex items-center">
           {index === destinations.length - 1 ? (
             <PinIcon className="absolute left-[-13px] mb-[-5px] bg-white w-[24px] h-[24px]" />
           ) : (
             <div className="absolute left-[-10px] mb-[-5px] border border-gray-700 bg-white rounded-full w-[18px] h-[18px]"></div>
+          )}
+
+          {index !== destinations.length - 1 && (
+            <div className="relative">
+              <BorderLine
+                dots={8}
+                className="absolute left-[-37px] h-[55px] top-[17px]"
+              />
+            </div>
           )}
 
           <DestinationsSearch

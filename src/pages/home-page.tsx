@@ -107,8 +107,6 @@ export const HomePage = () => {
     !!numbOfPassengers &&
     !!startDate;
 
-  //const onDateChange = (date: SetStateAction<Date>) => setStartDate(date);
-
   const onDateChange = (
     date: Date | null,
     event: React.SyntheticEvent<any> | undefined
@@ -126,8 +124,8 @@ export const HomePage = () => {
 
   return (
     <div className="flex justify-center items-center w-[100vw] h-[100vh]">
-      <div className="bg-white rounded-3xl py-[62px] px-[89px]">
-        <div className="flex items-start">
+      <div className="bg-white rounded-3xl py-[22px] md:py-[62px] px-[16px] md:px-[89px]">
+        <div className="flex flex-col md:flex-row items-start">
           <div className="mr-[78px]">
             <DestinationFormList
               destinations={destinations}
@@ -135,10 +133,18 @@ export const HomePage = () => {
               onSelectDestination={onSelectDestination}
               onClear={onClear}
             />
+            <div className="flex items-center ml-[-25px]">
+              <Button onClick={onAddDestination}>
+                <AddIcon />
+              </Button>
+              <Button color="primary" onClick={onAddDestination}>
+                Add destination
+              </Button>
+            </div>
           </div>
-          <div>
+          <div className="flex md:flex-col ml-[43px] mt-[30px] md:mt-0 mb-[50px]">
             <PassengersCounter
-              className="mb-5 mt-2"
+              className="md:mb-9 md:mt-2 mr-6 md:mr-0"
               value={numbOfPassengers}
               onIncrease={onAddPassengers}
               onDecrease={onRemovePassengers}
@@ -147,16 +153,9 @@ export const HomePage = () => {
           </div>
         </div>
 
-        <div className="flex items-center ml-[-25px]">
-          <Button onClick={onAddDestination}>
-            <AddIcon />
-          </Button>
-          <Button color="primary" onClick={onAddDestination}>
-            Add destination
-          </Button>
-        </div>
         <div className="flex justify-center">
           <Button
+            className="w-full m-0 md:m-[6px] md:w-auto"
             color="dark"
             variant="filled"
             disabled={!isFormValid}

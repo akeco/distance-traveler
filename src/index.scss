@@ -21,27 +21,6 @@ body {
   @apply text-purple-dark;
 }
 
-@mixin common-white-space {
-  @apply bg-white;
-  content: "";
-  display: block;
-  position: absolute;
-  left: -9px;
-  height: 40px;
-  width: 16px;
-  z-index: 0;
-}
-
-.white-space-top-content::before {
-  @include common-white-space;
-  top: 0;
-}
-
-.white-space-bottom-content::before {
-  @include common-white-space;
-  bottom: 0;
-}
-
 .carret::before {
   content: url("./assets/icons/carret.svg");
   position: absolute;

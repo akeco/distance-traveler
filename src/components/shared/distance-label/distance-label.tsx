@@ -9,7 +9,7 @@ export const DistanceLabel = ({ className, children }: DistanceLabelProps) => {
   return (
     <div
       className={clsx(
-        "relative border border-purple text-purple rounded-md px-2 whitespace-nowrap",
+        "relative border border-purple text-purple rounded-md px-2 whitespace-nowrap max-w-[110px]",
         className
       )}
     >
